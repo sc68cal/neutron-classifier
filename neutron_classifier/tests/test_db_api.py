@@ -39,10 +39,21 @@ class DbApiTestCase(base.BaseTestCase):
         a.description = 'ensure all data inserted correctly'
         a.service = 'neutron-fwaas'
         b = models.IpClassifier()
-        b.destination_ip_prefix = "fd70:fbb6:449e::/48"
-        b.source_ip_prefix = "fddf:cb3b:bc4::/48"
+        b.destination_ip_prefix = 'fd70:fbb6:449e::/48'
+        b.source_ip_prefix = 'fddf:cb3b:bc4::/48'
         result = api.create_classifier_chain(a, b)
         self.session.add(a)
         self.session.add(b)
         self.session.add(result)
         self.session.commit()
+
+    def test_convert_security_group_rule_to_classifier(self):
+        sg_rule = {'direction': 'INGRESS',
+                   'protocol': 'tcp',
+                   'ethertype': 6,
+                   'tenant_id': 'fake_tenant',
+                   'port_range_min': 80,
+                   'port_range_max': 80,
+                   'remote_ip_prefix': 'fddf:cb3b:bc4::/48',
+                   }
+        api.convert_security_group_rule_to_classifier(sg_rule)

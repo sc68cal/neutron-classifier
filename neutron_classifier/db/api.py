@@ -25,3 +25,28 @@ def create_classifier_chain(classifier_group, classifier):
     chain.classifier = classifier
     chain.classifier_group = classifier_group
     return chain
+
+
+def convert_security_group_rule_to_classifier(security_group_rule):
+    group = models.ClassifierGroup()
+    group.service = 'security-group'
+
+    # Pull the source from the SG rule
+    cl1 = models.IpClassifier()
+    cl1.source_ip_prefix = security_group_rule['remote_ip_prefix']
+
+    # Ports
+    cl2 = models.TransportClassifier()
+    cl2.destination_port_range_min = security_group_rule['port_range_min']
+    cl2.destination_port_range_max = security_group_rule['port_range_max']
+
+    chain1 = models.ClassifierChainEntry()
+    chain1.classifier_group = group
+    chain1.classifier = cl1
+    chain1.sequence = 1
+
+    chain2 = models.ClassifierChainEntry()
+    chain2.classifier_group = group
+    chain2.classifier = cl2
+    # Security Group calssifiers might not need to be nested or have sequences
+    chain2.sequence = 1
