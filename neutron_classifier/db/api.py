@@ -13,21 +13,30 @@
 # under the License.
 
 from neutron_classifier.db import models
+from oslo_db.sqlalchemy import enginefacade
+
+
+@enginefacade.transaction_context_provider
+class ClassifierContext(object):
+    "Classifier Database Context."
 
 
 def get_classifier_chain():
     pass
 
 
-def create_classifier_chain(classifier_group, classifier):
+@enginefacade.writer
+def create_classifier_chain(context, classifier_group, classifier):
     chain = models.ClassifierChainEntry()
     chain.sequence = 1
     chain.classifier = classifier
     chain.classifier_group = classifier_group
-    return chain
+    context.session.add(chain)
 
 
-def convert_security_group_rule_to_classifier(security_group_rule):
+@enginefacade.writer
+def convert_security_group_rule_to_classifier(context, security_group_rule):
+    # TODO(sc68cal) Pass in the classifier group
     group = models.ClassifierGroup()
     group.service = 'security-group'
 
@@ -48,17 +57,25 @@ def convert_security_group_rule_to_classifier(security_group_rule):
     chain2 = models.ClassifierChainEntry()
     chain2.classifier_group = group
     chain2.classifier = cl2
-    # Security Group calssifiers might not need to be nested or have sequences
+    # Security Group classifiers might not need to be nested or have sequences
     chain2.sequence = 1
+    context.session.add(group)
+    context.session.add(cl1)
+    context.session.add(cl2)
+    context.session.add(chain1)
+    context.session.add(chain2)
 
 
-def convert_firewall_rule_to_classifier(firewall_rule):
+@enginefacade.writer
+def convert_firewall_rule_to_classifier(context, firewall_rule):
     pass
 
 
-def convert_classifier_chain_to_security_group(chain_id):
+@enginefacade.reader
+def convert_classifier_chain_to_security_group(context, chain_id):
     pass
 
 
-def convert_classifier_to_firewall_policy(chain_id):
+@enginefacade.reader
+def convert_classifier_to_firewall_policy(context, chain_id):
     pass
