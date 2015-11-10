@@ -58,7 +58,6 @@ class DbApiTestCase(base.BaseTestCase):
                    }
         api.convert_security_group_rule_to_classifier(sg_rule)
 
-
     def test_convert_firewall_rule_to_classifier(self):
         firewall_rule = {'protocol': 'foo',
                          'ip_version': 6,
