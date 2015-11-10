@@ -50,3 +50,15 @@ def convert_security_group_rule_to_classifier(security_group_rule):
     chain2.classifier = cl2
     # Security Group calssifiers might not need to be nested or have sequences
     chain2.sequence = 1
+
+
+def convert_firewall_rule_to_classifier(firewall_rule):
+    pass
+
+
+def convert_classifier_chain_to_security_group(chain_id):
+    pass
+
+
+def convert_classifier_to_firewall_policy(chain_id):
+    pass
