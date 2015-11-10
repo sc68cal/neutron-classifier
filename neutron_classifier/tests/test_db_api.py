@@ -72,3 +72,14 @@ class DbApiTestCase(base.BaseTestCase):
                          }
         api.convert_firewall_rule_to_classifier(firewall_rule)
 
+    def test_convert_firewall_policy_to_classifier_chain(self):
+        pass
+
+    def test_convert_security_group_to_classifier_chain(self):
+        pass
+
+    def test_convert_classifier_chain_to_security_group(self):
+        pass
+
+    def test_convert_classifier_chain_to_firewall_policy(self):
+        pass
