@@ -57,3 +57,18 @@ class DbApiTestCase(base.BaseTestCase):
                    'remote_ip_prefix': 'fddf:cb3b:bc4::/48',
                    }
         api.convert_security_group_rule_to_classifier(sg_rule)
+
+
+    def test_convert_firewall_rule_to_classifier(self):
+        firewall_rule = {'protocol': 'foo',
+                         'ip_version': 6,
+                         'source_ip_address': 'fddf:cb3b:bc4::/48',
+                         'destination_ip_address': 'fddf:cb3b:b33f::/48',
+                         'source_port': 80,
+                         'destination_port': 80,
+                         'position': 1,
+                         'action': 'ALLOW',
+                         'enabled': True
+                         }
+        api.convert_firewall_rule_to_classifier(firewall_rule)
+
